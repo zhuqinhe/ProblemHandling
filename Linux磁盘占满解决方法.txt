@@ -1,0 +1,164 @@
+/opt/fonsview/3RD/elasticsearch/logs
+
+
+一、首先查看服务器磁盘使用情况，使用以下命令：
+ df -h  查看磁盘空间占用，实际上是查看磁盘块占用的文件（block）
+ df -i  查看索引节点的占用（Inodes）
+ df -hl 查看磁盘剩余空间
+ df -h  查看每个根目录下分区大小
+ du -sh [目录名] 返回该目录的大小
+ du -sm [文件夹] 返回该文件夹总M数
+
+
+
+
+二、查找占用磁盘的大文件通过命令
+  
+ 
+1.查找linux系统下占用磁盘最大的目录/文件
+#du -h --max-depth=1 
+
+
+2.在当前目录下查找大小超过800M的文件
+#find . -type f -size +800M
+
+3. 参照大小超过800M的文件并显示文件具体大小
+#find . -type f -size +800M  -print0 | xargs -0 du –h
+
+ 列出系统内大于100M的文件
+ find / -size +100M |xargs ls -lh
+
+4. 对查找文件结果按照文件大小做一个排序呢
+#find . -type f -size +800M  -print0 | xargs -0 du -h | sort -nr
+
+
+5. 查找当前目录下的大文件并排序
+#du -h --max-depth=2 | sort –n
+
+6. 过滤显示结果的前12个
+#du -h --max-depth=2 | sort -nr | head -12
+
+
+
+ 
+服务器报错No space left on device 解决Linux系统磁盘空间占满办法 
+ 
+最近Linux电脑在执行mvn时候总是报错: No space left on device   原因是磁盘空间满了,我马上加了20G的硬盘容量,但是还是报错,上网查了一下,发现了解决方法,我用了其中的1,2,6,7,9
+
+然后问题解决了:
+
+ 
+当初安装系统时设计不合理，有些分区分的过小，以及网络通讯故障等造成日志文件迅速增长等其他原因都可能表现为磁盘空间满，造成无法读写磁盘，应用程序无法执行等。下面就给你支几招(以/home空间满为例)：
+
+ 
+　　1. 定期对重要文件系统扫描，并作对比，分析那些文件经常读写
+ 
+　　#ls –lR /home >;files.txt
+ 
+　　#diff filesold.txt files.txt
+ 
+　　通过分析预测空间的增长情况，同时可以考虑对不经常读写文件进行压缩，以减少占用空间。
+ 
+　　2. 查看空间满的文件系统的inodes消耗
+ 
+　　#df – i /home
+ 
+　　如果还有大量inode可用，说明大文件占用空间，否则是可能大量小文件占用空间。
+ 
+　　3. 找出占用空间较大的目录
+ 
+　　查看/home 占用的空间
+ 
+　　#du –hs /home
+ 
+　　查看/home 下占用空间超过1000m
+ 
+　　#du |awk '$1>;2000'
+ 
+　　4. 找出占用空间较大的文件
+ 
+　　#find /home –size +2000k
+ 
+　　5. 找出最近修改或创建的文件
+ 
+　　先touch一个你想要的时间的文件如下：
+ 
+　　# touch -t 08190800 test
+ 
+　　#find /home -newer test -print
+ 
+　　6. 删除系统日志等
+ 
+　　删除生成 core,mbox等文件
+ 
+　　#find / -name core|xargs rm –rf
+ 
+　　删除日志
+ 
+　　#rm -rf /var/log/*
+ 
+　　7. 对分区做链接
+ 
+　　在有空间的分区，对没有空间分区做链接
+ 
+　　#ln -s /home /usr/home
+ 
+　　8.找出耗费大量的空间的进程
+ 
+　　根据不同的应用，找出对应的进程。分析原因。
+ 
+　　9.检查并修复文件系统
+ 
+　　#fsck –y /home
+ 
+　　10.重起机器
+ 
+　　有了以上的十招，应该可以解决大部分问题，但关键还是安装时要规划好分区。另外发现磁盘满时，不能急，小心操作，认真分析原因，然后小心应对。需要注意，以上十招不需要顺序执行，有的可能一招封喉，有的可能需要数招并用，删除操作一定要小心。如果还不行，只有采取增加硬盘，重新安装系统等"硬"办法了。
+ 
+　　还可以：
+ 
+　　cd \
+ 
+　　du -h --max-depth=1|grep G|sort -n
+ 
+　　找到最大的那个目录后进入该目录
+ 
+　　再运行du -h --max-depth=1|grep G|-n
+ 
+　　如果没有结果可以运行 du -h --max-depth=1|grep M|sort -n
+ 
+　　找出来以后看是否有用的文件
+ 
+　　没用就删掉
+ 
+
+
+
+1.定期对重要文件系统扫描，并作对比，分析那些文件经常读写
+#IS-IR/home>;files.txt
+#diff filesold.txt files.txt
+通过分析预测空间的增长情况，同时可以考虑对不经常读写文件进行压缩，以减少占用空间。
+
+2.查看空间文件系统的inodes消耗
+#df-i/home
+如果还有大量的inpde可用，说明大文件占用空间，否贼可能大量小文件占用空间。
+
+3.找出占用空间较大的目录
+查看/home占用的空间
+#du-hs/home
+查看/home下占用空间超过1000m
+#du/awk'$1>;2000M'
+
+4.找出占用空间较大的文件
+#find/home-size +1000MB
+
+5.找出最近修改或创建的文件
+先TOUCH一个你想要的时间的文件如下
+#TOUCH-t 08190800 test
+#find/home-newer test-print
+删除日志
+#rm-rf/var/log/*
+
+6.对分区做连接
+在有空间的分区，对没有空进分区做连接
+#in-s/home/use/home

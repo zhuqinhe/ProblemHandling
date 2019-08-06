@@ -1,0 +1,2 @@
+
+ss -lntpd | grep :4444

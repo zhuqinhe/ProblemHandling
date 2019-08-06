@@ -1,0 +1,61 @@
+查看连接数
+db.serverStatus().connections
+
+# 查看persons的索引
+db.persons.getIndexes()
+
+查看数据库中所有索引
+db.system.indexes.find()
+
+#删除persons集合里面所有的索引
+
+db.persons.dropIndexes()
+
+#删除peosons集合中对应name的索引
+db.persons.dropIndex("name")
+
+#创建索引(reIndex（）  重建索引)
+db.persons.ensureIndex({"name":1},{"unique":true})
+
+
+1.查看哪些文档（或数据库） 
+ show dbs  查看
+
+ use  persons  切换到persons数据库
+
+
+db.persons.insert({"name":"hoob"})  插入一条数据
+
+
+db.dropDatabase()   删除一个数据库
+
+db.collection.drop()  删除集合
+
+show  tables   查看数据库中的集合
+
+db.site.drop() 删除数据库中的site集合
+
+
+db.COLLECTION_NAME.insert(document)  向当前使用的数据库中插入一个文档（集合）
+
+db.col.find()   查看一插入的文档
+db.col.find().pretty()  美话查询结果
+
+
+db.col.update({'title':'MongoDB 教程'},{$set:{'title':'MongoDB'}})  将col集合中title为 MongoDB 教程 数据更新为MongDB（只更新匹配出来的第一条数据）
+
+db.col.update({'title':'MongoDB 教程'},{$set:{'title':'MongoDB'}},{multi:true}) 更新匹配的所有记录
+
+
+db.collection.save(） 替换已有的文档
+
+
+db.col.remove({'title':'MongoDB 教程'})  删除匹配到的记录，也可以设置只删除一条
+
+备份命令(没有就省略-u -p)
+ ./mongodump -h dbhost -d dbname –dir dbdirectory
+
+恢复命令(没有就省略-u -p)
+./mongorestore -h dbhost -d dbname –dir dbdirectory 
+
+

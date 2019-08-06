@@ -1,0 +1,26 @@
+
+
+-- 查看  6600   列出所有的网络连接
+
+lsof -i  :6600
+netstat -nat |grep 6600
+
+-- 查询端口被占用
+ss -lntpd | grep :4444
+
+
+1)统计6600端口连接数
+netstat -nat|grep -i "6600"|wc -l
+
+统计httpd协议连接数
+ps -ef|grep httpd|wc -l
+
+查看Apache的并发请求数及其TCP连接状态
+netstat -n | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'
+
+
+列出当前服务器建立的连接数
+netstat --inet | wc -l
+
+
+

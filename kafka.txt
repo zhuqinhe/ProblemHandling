@@ -1,0 +1,6 @@
+nohup  ./zookeeper-server-start.sh /hoob/kafka_2.11-1.1.0/config/zookeeper.properties >/hoob/zookeep.out 2>&1 &
+
+nohup  ./kafka-server-start.sh /hoob/kafka_2.11-1.1.0/config/server.properties >/hoob/kafka.out 2>&1 &
+
+
+注意执行 exit  退出，不然还是会强制中断命令

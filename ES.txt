@@ -1,0 +1,114 @@
+nohup  ./elasticsearch  >elasticsearch.out 2>&1 &
+
+nohup  ./kibana  >kibana.out 2>&1 &
+
+方式查询和过滤数据
+环境：
+Centos 6.5
+ 
+1.安装java环境(java环境必须是1.8版本以上的)
+ 
+wget http://download.oracle.com/otn-pub/java/jdk/8u131-b11/d54c1d3a095b4ff2b6607d096fa80163/jdk-8u131-linux-x64.rpm
+（无法下载需要自行下载）
+rpm -ivh jdk-8u131-linux-x64.rpm
+ 
+验证java安装成功
+java -version
+java version "1.8.0_131"
+Java(TM) SE Runtime Environment (build 1.8.0_131-b11)
+Java HotSpot(TM) 64-Bit Server VM (build 25.131-b11, mixed mode)
+ 
+2.安装ELK
+Elk安装包官方下载路径：
+https://www.elastic.co/cn/downloads
+点进其中一个，选择需要下载的产品版本，（注意：EKL三个产品的版本号需要一致）目前5.X版本比较流行
+ELK提供了多种系统环境的安装包，相关的安装配置操作，官方也提供了相应的文档
+下面我选择一种方式进行说明：
+首先已经下好安装包：
+tar –zvxf … 相应的进行解压
+Elasticsearch 、kibana、logstash的配置文件都是在各自的 文件中
+安装配置elasticsearch
+ 
+cd elasticsearch-5.6.6/config
+2.vim elasticsearch.yml
+添加集群名字（单机不用）：
+cluster.name: my-application
+添加节点名称，每个节点名称不能同名，（单机不用）：
+node.name: node-1
+设置ip：
+network.host: 192.168.10.124
+设置端口：
+http.port: 9200
+配置集群ip（单机不用）：
+discovery.zen.ping.unicast.hosts: ["192.168.10.124", "192.168.10.125"]
+ 
+配置另一机器（单机不用）
+添加集群名字（单机不用）：
+cluster.name: my-application
+添加节点名称，每个节点名称不能同名，（单机不用）：
+node.name: node-2
+设置ip：
+network.host: 192.168.10.125
+设置端口：
+http.port: 9200
+配置集群ip（单机不用）：
+discovery.zen.ping.unicast.hosts: ["192.168.10.124", "192.168.10.125"]
+因为elasticsearch是不允许在root用户下启动的，因此需要
+useradd elk
+chown –R elk elasticsearch-5.6.6
+su elk
+在elasticsearch-5.6.6目录下面
+./bin/elasticsearch启动
+./bin/elasticsearch  –d 后台启动
+另一台机器操作也是如此
+检查健康状态，请求其中的一个节点
+curl -XGET 'http://172.16.199.10:9200/_cat/health?v'
+还有另一种方式
+curl -XGET 'http://172.16.199.10:9200/_cluster/state/nodes?pretty'
+另外集群的健康管理也可以安装elasticsearch-head插件，因为版本不同安装的方式也不同，因此如果需要，则需要去网上查看相应的安装方式
+ 
+                         安装配置Kibana
+1 . cd kibana-5.6.6-linux-x86_64
+vim config/kibana.yml
+设置kibana的端口号
+server.port: 5601
+设置ip
+server.host: "192.168.10.125"
+设置elasticsearch的ip
+elasticsearch.url: http://192.168.10.125:9200
+ 
+./bin/kibana启动
+然后直接访问配置的ip
+另外kibana提供了很多图形化展现功能，这需要进一步的学习
+
+
+
+
+sudo vim /etc/sysctl.conf
+ 
+添加下面配置：
+vm.max_map_count=655360
+ 
+并执行命令：
+sysctl -p
+
+
+sudo vim /etc/security/limits.d/90-nproc.conf
+ 
+找到如下内容：
+* soft nproc 1024
+ 
+#修改为
+* soft nproc 2048
+
+vim /etc/security/limits.conf
+ 
+添加如下内容:
+* soft nofile 65536
+* hard nofile 131072
+
+
+
+
+
+

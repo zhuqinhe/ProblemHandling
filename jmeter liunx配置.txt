@@ -1,0 +1,22 @@
+
+-- liunx 上面的环境配置 /etc/profile   source /etc/profile  生效
+export JMETER_HOME=/hoob/apache-jmeter-4.0
+export PATH=$JMETER_HOME/bin/:$PATH
+
+-- 运行压测的脚本命令  sh jmeter -v 检查是否安装成功
+
+-- 生成聚合报告
+sh jmeter -n  -t /opt/hoob/hn/2/test.jmx -l /opt/hoob/hn/1/test.jtl 
+
+
+sh jmeter -g   /opt/hoob/hn/2/test.jtl  -o /opt/hoob/hn/2/resultReport
+
+jmeter -g C:\Users\Administrator\Desktop\压力测试结果\2\test.jtl -o C:\Users\Administrator\Desktop\压力测试结果\2\resultReport
+
+
+
+JAVA_OPTS="-Dcom.sun.management.jmxremote.port=8888 -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Djava.rmi.server.hostname=172.16.30.131   -Djava.security.egd=file:/dev/./urandom -Djgroups.bind_addr=172.16.30.131 -Dfile.encoding=UTF-8 -Djava.net.preferIPv4Stack=true -server  -Xmx11g -Xms11g -Xmn3g -Xss512k -XX:+UseConcMarkSweepGC -XX:CMSFullGCsBeforeCompaction=0  -XX:+UseCMSCompactAtFullCollection -XX:CMSInitiatingOccupancyFraction=80 -XX:+CMSParallelRemarkEnabled  -XX:+PrintGCDetails -XX:+PrintGCTimeStamps  -XX:+PrintGCApplicationStoppedTime  -Xloggc:/opt/fonsview/NE/gc.log"
+
+
+
+sh jmeter -n -t /opt/hoob/hn/46/test.jmx -l /opt/hoob/hn/46/test.jtl

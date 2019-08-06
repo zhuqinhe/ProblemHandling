@@ -1,0 +1,3 @@
+scp -r /export/ 172.16.0.41:$PWD   把当前服务器下 /export  目录下的所有东西  分发到远程服务器的相应目录下
+
+scp -r  root@172.16.199.10:/root/jenkins  /root/  从远程服务器172.16.199.10 上  复制/root/jenkins下所有的内容到当前服务器 /root/目录下

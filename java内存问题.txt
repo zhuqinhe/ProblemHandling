@@ -1,0 +1,50 @@
+检查JVM可支持的最大内存
+java -Xmx144666M -version
+
+
+1. 找到进程的PID
+--  比如tomcat  进程23212，
+
+top -Hp 23212  则查看tomcat里面当前哪些线程获取
+
+输出当前pid信息
+cat /proc/pid/status
+
+
+当前进程23212 堆文件
+
+jmap -dump:live,format=b,file=/dump23212.hprof 23212
+
+jmap -heap pid > pid.txt   当前pid堆情况
+
+jmap -histo 进程id > pid.log
+
+jmap -histo:live pid | head -30  获取前30行
+
+ 
+
+
+--  垃圾回收情情况  jvm  
+   jstat -gc  pid
+
+
+cpu 100%  单核挂死
+
+--  查看线程列表
+ps -mp pid -o THREAD,tid,time 
+
+-- 查看进程列表
+top -H -p 4977
+
+-- jstack pid |grep tid -A 30  查询进程下前30行 
+
+-- jstack 4977|grep -A 10 1371 
+
+执行 得到线程堆栈信息中1371这个线程所在行的后面10行 
+
+
+pstsck  pid
+
+pmap (查看进程用了多少内存) -- pmap [参数] PID
+
+

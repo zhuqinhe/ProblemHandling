@@ -1,0 +1,33 @@
+
+
+iostat -x 1 25
+
+rrqm/s:每秒进行merge的读操作数目。即delta(rmerge)/s?
+
+wrqm/s:每秒进行merge的写操作数目。即delta(wmerge)/s?
+
+r/s:每秒完成的读I/O设备次数。即delta(rio)/s?
+
+w/s:每秒完成的写I/0设备次数。即delta(wio)/s?
+
+rsec/s:每秒读扇区数。即delta(rsect)/s?
+
+wsec/s:每秒写扇区数。即delta(wsect)/s?
+
+rKB/s:每秒读K字节数。是rsec/s的一半，因为每扇区大小为512字节?
+
+
+wKB/s:每秒写K字节数。是wsec/s的一半?
+
+avgrq-sz:平均每次设备I/O操作的数据大小(扇区)。即delta(rsect+wsect)/delta(rio+wio)?
+
+avgqu-sz:平均I/O队列长度。即delta(aveq)/s/1000(因为aveq的单位为毫秒)?
+
+await:平均每次设备I/O操作的等待时间(毫秒)。即delta(ruse+wuse)/delta(rio+wio)?
+
+svctm:平均每次设备I/O操作的服务时间(毫秒)。即delta(use)/delta(rio+wio)?
+
+%util:一秒中有百分之多少的时间用于I/O操作,或者说一秒中有多少时间I/O队列是非空的
+
+
+找出使用io高的进程的工具  iotop
