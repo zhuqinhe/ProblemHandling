@@ -1,4 +1,30 @@
-﻿catalina.sh下配置tomcat内存
+﻿     #红色位置建议为物理内存的一半。 
+      此配置在JDK1.7以上才能生效，否则保持原来不变。
+       JAVA_OPTS="-server -XX:+UseG1GC -Xmx250g -XX:MaxGCPauseMillis=1000  -XX:-UseGCOverheadLimit"                          
+
+
+       2、 /opt/fonsview/3RD/tomcat7.0.63/conf/server.xml  , 建议配置为： 
+             <!-- 参考值 CPU 8个逻辑核心     maxThreads=6000, minSpareThreads=500  -->
+             <!-- 参考值 CPU 12个逻辑核心   maxThreads=6000, minSpareThreads=500  -->
+             <!-- 参考值 CPU 24个逻辑核心   maxThreads=6000, minSpareThreads=1000-->
+             <!-- 参考值 CPU 24以上逻辑核心   maxThreads=6000, minSpareThreads=2000-->
+             <Executor name="tomcatThreadPool" namePrefix="catalina-exec-"  maxThreads="6000" minSpareThreads="2000" maxIdleTime="120000"/>
+            
+
+            <!--  port ， redirectPort 因不同的场景或网元而异  -->
+            <!--  参考值 CPU 8个以下逻辑核心  acceptorThreadCount =2   ，CPU 8个以上逻辑核心  acceptorThreadCount = 4 -->           
+            <Connector  executor="tomcatThreadPool"  port="6600" protocol="org.apache.coyote.http11.Http11NioProtocol"
+               connectionTimeout="5000"  acceptorThreadCount="4"    
+               redirectPort="6064"             
+               acceptCount="20480"
+               enableLookups="false"
+               maxKeepAliveRequests="20480"
+               keepAliveTimeout="5000"             
+               server="Fonsview Server v2.0"/>
+
+
+
+catalina.sh下配置tomcat内存
 
 JAVA_OPTS=
 -Xms512m 

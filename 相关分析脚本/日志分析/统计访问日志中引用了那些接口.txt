@@ -1,0 +1,2 @@
+ cat  localhost_access_log.* |awk -F '"' '{print $2;}' | awk -F ' ' '{print $2}' | awk -F '?' '{print $1}' |sort|uniq >>count_log.txt
+ grep 'EPG/jsp/default' count_log.txt | grep '\.jsp' >> default_jsp.txt

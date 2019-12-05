@@ -19,4 +19,7 @@ JAVA_OPTS="-Dcom.sun.management.jmxremote.port=8888 -Dcom.sun.management.jmxremo
 
 
 
-sh jmeter -n -t /opt/hoob/hn/46/test.jmx -l /opt/hoob/hn/46/test.jtl
+sh jmeter -n -t /hoob/epgmtest/1/test.jmx -l /hoob/epgmtest/1/test.jtl
+
+
+/usr/local/apache-jmeter-3.1/bin:$PATH
