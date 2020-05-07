@@ -1,0 +1,30 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- The contents of this file will be loaded for each web application -->
+<Context>
+
+    <!-- Default set of monitored resources -->
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+
+    <!-- Uncomment this to disable session persistence across Tomcat restarts -->
+    <!--
+             <Manager pathname="" />
+    -->
+
+    <!-- Uncomment this to enable Comet connection tacking (provides events
+                  on session expiration as well as webapp lifecycle) -->
+    <!--
+             <Valve className="org.apache.catalina.valves.CometConnectionManagerValve" />
+    -->
+
+    <Resource name="jdbc/myDataSource" auth="Container"
+            type="javax.sql.DataSource"
+            driverClassName="com.mysql.jdbc.Driver"
+            url="jdbc:mysql://mdms-mariadb:3306/cmsdb?useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true&amp;autoReconnectForPools=true&amp;failOverReadOnly=false"
+            username="root"
+            password="admin"
+            maxActive="200"
+            maxIdle="100"
+            maxWait="10000"
+            factory="org.apache.tomcat.dbcp.dbcp.BasicDataSourceFactory"
+            bar="23"/>
+</Context>

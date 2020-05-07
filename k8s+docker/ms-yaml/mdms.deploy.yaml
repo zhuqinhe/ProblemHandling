@@ -1,0 +1,86 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: metadata
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: metadata
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: metadata
+      name: metadata
+    spec:
+      containers:
+      - image: rvm:5100/epg/metadata:1299
+        imagePullPolicy: IfNotPresent
+        name: metadata
+        env:
+          - name: JAVA_OPTS
+            valueFrom:
+              configMapKeyRef:
+                name: mdms-config
+                key: java_opts
+        volumeMounts:
+          - name: db-config
+            mountPath: /opt/fonsview/3RD/tomcat7.0.63/conf/context.xml
+            subPath: context.xml
+          - name: sdk-config
+            mountPath: /opt/fonsview/3RD/tomcat7.0.63/conf/api-gateway.properties
+            subPath: api-gateway.properties
+          - name: ms-etc
+            mountPath: /opt/fonsview/NE/metadata/etc/config.properties
+            subPath: config.properties
+          - name: run-config
+            mountPath: /run.sh
+            subPath: run.sh
+          - name: log4j-config
+            mountPath: /opt/fonsview/NE/metadata/etc/log4j2.xml
+            subPath: log4j2.xml
+
+        resources:
+          requests:
+            cpu: "4"
+            memory: 4Gi
+          limits:
+            cpu: "4"
+            memory: 8Gi
+      volumes:
+      - name: db-config
+        configMap:
+          name: mdms-config
+          items:
+          - key: db-config
+            path: context.xml 
+      - name: sdk-config
+        configMap:
+          name: sdk-config
+          items:
+          - key: apigw_addr
+            path: api-gateway.properties
+      - name: ms-etc
+        configMap:
+          name: mdms-config
+          items:
+          - key: ms-etc
+            path: config.properties
+      - name: run-config
+        configMap:
+          name: sdk-config
+          items:
+          - key: run_sh
+            path: run.sh
+      - name: log4j-config
+        configMap:
+          name: mdms-config
+          items:
+          - key: log4j-config
+            path: log4j2.xml
+      dnsPolicy: ClusterFirst
+      imagePullSecrets:
+      - name: openplatform
+      restartPolicy: Always

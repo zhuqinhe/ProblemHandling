@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mdms-config
+data:
+  db-config: |
+    <?xml version='1.0' encoding='utf-8'?>
+    <Context>
+        <WatchedResource>WEB-INF/web.xml</WatchedResource>
+    <Resource name="jdbc/myDataSource" auth="Container"
+            type="javax.sql.DataSource"
+            driverClassName="com.mysql.jdbc.Driver"
+            url="jdbc:mysql://cms-db:3306/cmsdb?useUnicode=true&amp;characterEncoding=utf8"
+            username="root"
+            password="admin"
+            maxActive="100"
+            maxIdle="1"
+            maxWait="10000"
+            />
+    </Context>
+  java_opts: |
+    "-Djava.awt.headless=true -Dfile.encoding=UTF-8
+     -server -Xms2048m -Xmx2048m -XX:PermSize=256m -XX:MaxPermSize=256m"
+  ms-etc: |
+    MultiCastProtocol=udp
+    verifyHMAC=0
+    checkoutTimeout=5000
+    minPoolSize=20
+    maxPoolSize=1000
+    maxStatements=1000
+    acquireIncrement=2
+    filter_area=\u5730\u533a
+    filter_year=\u5e74\u4efd
+    filter_type=\u7c7b\u578b
+    pictureUrlIP_old=picture
+    pictureUrlIP_new=http://10.192.116.101:6600/media/picture
+  log4j-config: |
+    <?xml version="1.0" encoding="UTF-8"?>
+    <configuration status="trace" monitorInterval="300">
+    <Properties>
+        <Property name="fileName">metadata.log</Property>
+        <Property name="backupFilePatch">/opt/fonsview/NE/metadata/log</Property>
+    </Properties>
+    <appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <ThresholdFilter level="trace" onMatch="ACCEPT" onMismatch="DENY" />
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%-5level] %class{36} %L %M - %msg%xEx%n" />
+        </Console>
+        <RollingFile name="RollingFile" fileName="${backupFilePatch}/metadata.log" immediateFlush="true"
+            filePattern="${backupFilePatch}/metadata.log.%i">
+            <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY" />
+            <PatternLayout pattern="%d{yyyy.MM.dd 'at' HH:mm:ss.SSS z} [%-5level] %class{36} %L %M - %msg%xEx%n" />
+            	<Policies>     
+                <SizeBasedTriggeringPolicy size="10MB" />
+                <DefaultRolloverStrategy max="100"/>
+            </Policies>     
+         </RollingFile>
+    </appenders>
+        <loggers>
+        <Root level="info">
+             <AppenderRef ref="Console" /> 
+            <AppenderRef ref="RollingFile" />
+        </Root>
+     </loggers>
+    </configuration>
+  

@@ -1,0 +1,125 @@
+﻿Basic Commands:
+1. 创建资源对象：
+Usage: kubectl create -f object.yaml/json
+	object: namespace(ns) | deployment(deploy) | service(svc) | ...
+
+(1) 创建namespace:
+a. 命令行直接创建
+$kubectl create namespace new-namespace
+b. 通过文件创建my-namespace.yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: new-namespace
+
+$kubectl create -f my-namespace.yaml
+
+删除namespace:
+$kubectl delete namespaces new-namespace
+
+
+(2) 创建deployment: nginx-deploy.yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: nginx
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+      name: nginx
+    spec:
+      containers:
+      - image: nginx:latest
+        name: nginx
+        resources:
+          requests:
+            cpu: "1"
+            memory: 1Gi
+          limits:
+            cpu: "1"
+            memory: 1Gi
+
+$kubectl create -f nginx-deploy.yaml
+
+删除deployment：
+$kubectl delete -f nginx-deploy.yaml
+
+
+(3) 创建service: nginx-svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  namespace: default
+  labels:
+    app: nginx
+spec:
+  selector:
+    app: nginx
+  ports:
+    - port: 80
+      targetPort: 80
+
+$kubectl create -f nginx-svc.yaml
+
+删除service：
+$kubectl delete -f nginx-svc.yaml
+
+
+2. 获取资源对象的信息：
+Usage: kubectl get pods(po) | deployments(deploy) | nodes(no) | services(svc) | namespaces(ns) | endpoints(ep) | ... [--namespace NAMESPACE | -n NAMESPACE] [--all-namespaces] [-o wide]
+$kubectl get po -n kube-system
+
+kubectl describe (-f FILENAME | TYPE [NAME_PREFIX | -l label] | TYPE/NAME) [options]
+$kubectl describe pod nginx-5795b764f8-xzkb4
+
+3. 删除资源对象：
+Usage: kubectl delete ([-f FILENAME] | TYPE [(NAME | -l label | --all)]) [options]
+kubectl delete pod POD [--namespace NAMESPACE]
+kubectl delete service SERVICE [--namespace NAMESPACE]
+kubectl delete pods --all [--namespace NAMESPACE]
+$kubectl delete pod nginx-5795b764f8-xzkb4 
+
+4. 创建资源对象的另一种方法：
+Usage：kubectl apply -f object.yaml/json
+$kubectl apply -f nginx-deploy.yaml
+
+5. 替换资源对象
+Usage：kubectl replace -f object.yaml/json
+$kubectl replace -f nginx-deploy.yaml
+
+
+Troubleshooting and Debugging Commands:
+1. 在容器中执行命令
+Usage: kubectl exec POD [-c CONTAINER] -it -- COMMAND [args...] 
+$kubectl exec nginx-5795b764f8-xzkb4 -it -- sh 
+kubectl exec -it pod名 bash
+
+2. 查看容器的日志
+Usage: kubectl logs -f POD [-c CONTAINER]
+$kubectl logs -f nginx-5795b764f8-xzkb4
+
+3.下载镜像
+docker load -i  tomcat.tar(打包镜像文件)
+
+镜像保存到本地
+docker save -o tomcat.tar(镜像保存到本地的名字) 上一步制作成的镜像名（）
+
+
+获取service
+kubectl get service
+
+删除metadata  service 
+kubectl delete service metadata
+
+
+查看pod 详细
+kubectl get pod -o wide
+
