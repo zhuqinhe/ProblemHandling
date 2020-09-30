@@ -1,6 +1,7 @@
+su elsearch
 nohup  ./elasticsearch  >elasticsearch.out 2>&1 &
 
-nohup  ./kibana  >kibana.out 2>&1 &
+nohup  ./kibana  --allow-root >kibana.out 2>&1 &
 
 方式查询和过滤数据
 环境：
