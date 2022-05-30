@@ -1,0 +1,36 @@
+解固
+
+chattr -i /etc/passwd 
+chattr -i /etc/shadow 
+chattr -i /etc/group 
+chattr -i /etc/passwd- 
+chattr -i /etc/shadow- 
+chattr -i /etc/group- 
+chattr -i /etc/gshadow
+chmod 755  /etc/passwd- 
+chmod 755  /etc/shadow-
+
+chattr -R -i /bin /boot /lib /sbin
+chattr -R -i /usr/bin /usr/include /usr/lib /usr/sbin
+chattr -a /var/log/messages /var/log/secure /var/log/maillog
+
+
+加固 
+
+chmod -R go-w /etc
+chmod -R 750 /etc/rc.d/init.d/*
+
+
+chmod 600  /etc/passwd- 
+chmod 600  /etc/shadow-
+
+Chattr  +i /etc/passwd 
+chattr  +i /etc/shadow 
+chattr  +i /etc/group 
+chattr  +i /etc/passwd- 
+chattr  +i /etc/shadow- 
+chattr  +i /etc/group- 
+
+chattr -R +i /bin /boot /lib /sbin
+chattr -R +i /usr/bin /usr/include /usr/lib /usr/sbin
+chattr +a /var/log/messages /var/log/secure /var/log/maillog

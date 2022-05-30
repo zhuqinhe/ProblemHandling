@@ -1,0 +1,9 @@
+
+tcpdump -i any -s0 -Annpl port 6600 -w /opt/fonsview/NE/cms/log/1.pcap
+
+tcpdump port 6600  -i any -vv -w /opt/fonsview/NE/cms/log/1.cap
+
+verbose output suppressed, use -v or -vv for full protocol decode 
+
+
+

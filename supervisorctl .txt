@@ -1,0 +1,19 @@
+systemctl enable supervisor #supervisor开机自启：
+systemctl start supervisor  # 开始运行
+
+systemctl stop supervisord  #停止服务
+systemctl start supervisord  #启动服务 
+systemctl status supervisord #查看服务状态
+systemctl reload supervisord  #加载新添加的配置
+systemctl restart supervisord #重启服务
+ 
+
+
+supervisorctl restart 队列名称:*   #重启单个指定的队列
+supervisorctl status      //查看所有进程的状态
+supervisorctl stop <name>|all     //停止<name>或all停止所有supervisor进程
+supervisorctl start <name>|all    //启动<name>或all启动所有supervisor进程,可用通配符*。es*表示es开头的supervisor进程
+supervisorctl restart     //重启
+supervisorctl update      //配置文件修改后使用该命令加载新的配置
+supervisorctl reread	  //重载配置文件
+supervisorctl reload      //重新启动配置中的所有程序
