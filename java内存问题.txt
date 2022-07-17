@@ -27,6 +27,11 @@ jmap -histo:live pid | head -30  获取前30行
 --  垃圾回收情情况  jvm  
    jstat -gc  pid
 
+-- 
+jstat -gc 18004 1000 即可监控GC情况。其中： 18004是JAVA进程的端口号， 1000表示1000毫秒，也就是每隔一秒展示GC监控数据；
+
+
+
 
 cpu 100%  单核挂死
 
